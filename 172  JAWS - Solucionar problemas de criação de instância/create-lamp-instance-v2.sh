@@ -1,36 +1,36 @@
 #!/bin/bash
 DATE=`date '+%Y-%m-%d %H:%M:%S'`
  echo
- echo "Running create-instance.sh on "$DATE
+ echo "rodando create-instance.sh on "$DATE
  echo
 
-# Hard coded values
-   instanceType="t3.small"
-   echo "Instance Type: "$instanceType
-  profile="default"
-  echo "Profile: "$profile
+# definindo instancia
+   instanceType="t3.small" # esta linha decide o tipo da instancia que será "t3.small"
+   echo "Instance Type: "$instanceType # Imprimi qual foi o tipo da instancia provisionada
+  profile="default" # definindo o profile default
+  echo "Profile: "$profile # Imprimi o profile
  
   echo
-  echo "Looking up account values..."
+  echo "Procurando valores de conta..."
   
-  # get vpcId
-  vpc=""
-  while [[ "$vpc" == "" ]] ; do
-    for i in $(aws ec2 describe-regions | grep RegionName | cut -d '"' -f4) ; do
-      region=$i;
-      vpc=$(aws ec2 describe-vpcs --region $i --filters "Name=tag:Name,Values='Cafe VPC'" --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p );
-      if [[ "$vpc" != "" ]]; then
-          break;
+  # Pegar a vpcId
+  vpc="" # Inicializa a variável 'vpc' com uma string vazia
+  while [[ "$vpc" == "" ]] ; do # Inicia um loop while que continua enquanto a variável 'vpc' for uma string vazia
+    for i in $(aws ec2 describe-regions | grep RegionName | cut -d '"' -f4) ; do # Itera sobre as regiões obtidas a partir do comando 'aws ec2 describe-regions'
+      region=$i; # Atribui a região atual à variável 'region'
+      vpc=$(aws ec2 describe-vpcs --region $i --filters "Name=tag:Name,Values='Cafe VPC'" --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p ); # Obtém o ID da VPC para a VPC especificada com a tag "Cafe VPC" na região atual
+      if [[ "$vpc" != "" ]]; then # Verifica se a variável 'vpc' não é uma string vazia
+          break; # Sai do loop se um ID de VPC não vazio for encontrado
       fi
     done
   done
   echo
-  echo "VPC: "$vpc
-  echo "Region: "$region
+  echo "VPC: "$vpc # Imprime o ID da VPC
+  echo "Region: "$region # Imprime a região encontrada
   
-  vpc=$(aws ec2 describe-vpcs \
+  vpc=$(aws ec2 describe-vpcs \ 
   --filters "Name=tag:Name,Values='Cafe VPC'" \
-  --region $region \
+  --region $region \ 
   --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p)
   echo "VPC: "$vpc
   
