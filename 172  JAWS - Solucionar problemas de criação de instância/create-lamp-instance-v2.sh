@@ -28,10 +28,10 @@ DATE=`date '+%Y-%m-%d %H:%M:%S'`
   echo "VPC: "$vpc # Imprime o ID da VPC
   echo "Region: "$region # Imprime a região encontrada
   
-  vpc=$(aws ec2 describe-vpcs \ 
-  --filters "Name=tag:Name,Values='Cafe VPC'" \
+  vpc=$(aws ec2 describe-vpcs \  
+  --filters "Name=tag:Name,Values='Cafe VPC'" \ 
   --region $region \ 
-  --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p)
+  --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p) 
   echo "VPC: "$vpc
   
   # get subnetId
