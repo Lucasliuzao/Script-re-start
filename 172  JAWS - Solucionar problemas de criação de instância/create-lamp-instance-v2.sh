@@ -28,19 +28,20 @@ DATE=`date '+%Y-%m-%d %H:%M:%S'`
   echo "VPC: "$vpc # Imprime o ID da VPC
   echo "Region: "$region # Imprime a região encontrada
   
-  vpc=$(aws ec2 describe-vpcs \  
-  --filters "Name=tag:Name,Values='Cafe VPC'" \ 
+  # Obtém novamente o ID da VPC para a última região obtida
+  vpc=$(aws ec2 describe-vpcs \   
+  --filters "Name=tag:Name,Values='Cafe VPC'" \  
   --region $region \ 
   --profile $profile | grep VpcId | cut -d '"' -f4 | sed -n 1p) 
-  echo "VPC: "$vpc
+  echo "VPC: "$vpc # Imprime o ID da VPC para a última região
   
-  # get subnetId
+ # Obtém o ID da sub-rede para a sub-rede especificada com a tag "Cafe Public Subnet 1" na região atual
   subnetId=$(aws ec2 describe-subnets \
   --filters "Name=tag:Name,Values='Cafe Public Subnet 1'" \
   --region $region \
   --profile $profile \
   --query "Subnets[*]" | grep SubnetId | cut -d '"' -f4 | sed -n 1p)
-  echo "Subnet Id: "$subnetId
+  echo "Subnet Id: "$subnetId # Imprime o ID da sub-rede-
   
   # Get keypair name
   key=$(aws ec2 describe-key-pairs \
